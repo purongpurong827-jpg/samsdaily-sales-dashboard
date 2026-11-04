@@ -7,7 +7,9 @@
     document.open();document.write(html);document.close();return;
   }
   const frameUrl=new URL(url.href);frameUrl.searchParams.set('__sales_frame','1');
-  url.searchParams.delete('view');url.searchParams.delete('tab');url.searchParams.delete('__sales_frame');
+  const saved=document.getElementById('sales-portable-state');
+  if(saved){const revision=JSON.parse(saved.textContent).portableId;if(revision)frameUrl.searchParams.set('__sales_revision',revision);}
+  url.searchParams.delete('view');url.searchParams.delete('tab');url.searchParams.delete('__sales_frame');url.searchParams.delete('__sales_revision');
   if(url.href!==window.location.href)window.history.replaceState(window.history.state,'',url.href);
   const frame=document.createElement('iframe');frame.id='sales-frame';frame.title="Sam's Club Daily Sales Dashboard";frame.src=frameUrl.href;
   document.body.appendChild(frame);
